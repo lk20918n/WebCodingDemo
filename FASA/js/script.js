@@ -1,22 +1,40 @@
-let text = document.getElementById('stars');
+const apiKey = "d7CW/g45hyeJSNKu4jScXg==8tr3CMC4nOv47fiu";
+const apiURL = "https://api.api-ninjas.com/v1/facts?limit=1";
+const btnEl = document.getElementById("btn");
+const txtEl = document.getElementById("fact");
 
-const maxScroll = document.body.scrollHeight - window.innerHeight;
-let lastScroll = 0;
+const options = {
+  method: "GET",
+  headers: {
+    "X-Api-Key": apiKey,
+  },
+};
 
-window.addEventListener('scroll', () => {
-    let value = window.scrollY;
+async function getFact() {
+  txtEl.innerText = "Generating fact...";
+  btnEl.disabled = true;
+  const response = await fetch(apiURL, options);
+  const data = await response.json();
+  btnEl.disabled = false;
+  txtEl.innerText = data[0].fact;
+}
 
-    if (value > maxScroll) {
-        value = maxScroll;
-    }
+getFact();
 
-    let scrollDelta = value - lastScroll;
-    lastScroll = value;
+btnEl.addEventListener("click", getFact);
 
-    text.style.marginTop = (parseFloat(getComputedStyle(text).marginTop) + scrollDelta * 2.5) + 'px';
-    leaf.style.top = (parseFloat(getComputedStyle(leaf).top) - scrollDelta * 1.5) + 'px';
-    leaf.style.left = (parseFloat(getComputedStyle(leaf).left) + scrollDelta * 1.5) + 'px';
-    hill5.style.left = (parseFloat(getComputedStyle(hill5).left) + scrollDelta * 1.5) + 'px';
-    hill4.style.left = (parseFloat(getComputedStyle(hill4).left) - scrollDelta * 1.5) + 'px';
-    hill1.style.top = (parseFloat(getComputedStyle(hill1).top) + scrollDelta * 1) + 'px';
-})
+// fetch(apiURL, {
+//   method: "GET",
+//   headers: {
+//     "X-Api-Key": apiKey,
+//   },
+// })
+//   .then((response) => response.json())
+//   .then((response) => {
+//     // console.log(response);
+//     console.log(response[0].fact);
+//     document.getElementById("fact").innerText = response[0].fact;
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
